@@ -82,7 +82,18 @@ def print_banner():
     print(Fore.YELLOW + "="*60)
     print(Fore.GREEN + "Facebook Account Creator".center(60))
     print(Fore.YELLOW + "="*60 + "\n")
-
+# ====== APPROVAL SYSTEM ======
+def check_approval():
+    approved_keys = ["REBORN-2024", "FB-AUTO-KEY", "MYSECRET123"]
+    print(f"{WHITE}[?] This script requires approval to run.{RESET}")
+    key = input(f"{WHITE}[?] Enter your approval key: {RESET}")
+    if key in approved_keys:
+        print(f"{GREEN}[✓] Approved! Access granted.{RESET}")
+        time.sleep(1)
+        return True
+    else:
+        print(f"{COLOR_LIGHT_RED}[X] Invalid key! Access denied.{RESET}")
+        return False
 # ====== USER AGENT GENERATOR ======
 def ua1():
     a = "[FBAN/FB4A;FBAV/"+str(random.randint(11,80))+'.0.0.'+str(random.randrange(9,49))+'.'+str(random.randint(11,77)) +";FBBV/"+str(random.randint(11111111,99999999))+";"
