@@ -134,7 +134,8 @@ class FacebookAppChecker:
 
 
 if __name__ == "__main__":
-    FacebookAppChecker()COLOR_PURPLE = "\033[0;35m"
+    FacebookAppChecker()
+    COLOR_PURPLE = "\033[0;35m"
 
 # ------------[ BANNER ]-------------- #
 run_count = 0
@@ -336,4 +337,5 @@ if __name__ == '__main__':
 
             print(f"{GREEN}[Reborn-OK]  {YELLOW}({GREEN}{i+1}{YELLOW}){YELLOW}{WHITE}+{GREEN}OK{YELLOW}({GREEN}{num}{YELLOW}){RESET}")
             register_facebook_account(password, fname, lname, bday, emails[i])
+
 
