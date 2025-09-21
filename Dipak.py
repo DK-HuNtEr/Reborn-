@@ -41,11 +41,14 @@ class FacebookAppChecker:
             cleaned = self.extract_fb_cookies(raw_cookie)
             if cleaned:
                 console.print("\n[bold green]✅ Extracted login cookies:[/bold green]")
-                console.print(Panel(cleaned, title="[bold yellow]Cookies[/bold yellow]", style="green", box=box.ROUNDED))
+                print(f"{self.b}={self.w}" * 56)
+                console.print(f"[green]{cleaned}[/green]")
+                print(f"{self.b}={self.w}" * 56)
             else:
                 console.print("[bold red]⚠️ No valid Facebook cookies found![/bold red]")
         else:
             print(f"{self.r}[//] Invalid choice{self.w}")
+            
 
     # ------------[ LOGO + STATUS ]-------------- #
     def logo(self):
@@ -150,8 +153,9 @@ class FacebookAppChecker:
             match = re.search(rf"{key}=([^;]+)", raw_cookie)
             if match:
                 cookies[key] = match.group(1)
-        cookie_str = "; ".join(f"{k}={v}" for k, v in cookies.items())
+        cookie_str = ";".join(f"{k}={v}" for k, v in cookies.items())  # no space after ;
         return cookie_str
+        os.system('python reborn .py')
 
 
 if __name__ == "__main__":
